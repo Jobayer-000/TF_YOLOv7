@@ -45,7 +45,7 @@ class Detect(keras.layers.Layer):
         grid_xy = tf.meshgrid(tf.range(ny), tf.range(nx))
         grid = tf.cast(tf.expand_dims(tf.stack(grid_xy, axis=-1), 2), tf.float32)
         return tf.cast(grid, tf.float32)
-blocks.Detect = Detect
+common.blocks.Detect = Detect
 
     
 @keras.utils.register_keras_serializable()
@@ -119,7 +119,7 @@ class IDetect(keras.layers.Layer):
         grid_xy = tf.meshgrid(tf.range(ny), tf.range(nx))
         grid = tf.cast(tf.expand_dims(tf.stack(grid_xy, axis=-1), 2), tf.float32)
         return tf.cast(grid, tf.float32)
-blocks.IDetect = IDetect
+common.blocks.IDetect = IDetect
 
 
 @keras.utils.register_keras_serializable()
@@ -218,7 +218,7 @@ class IAuxDetect(keras.layers.Layer):
                                            dtype=tf.float32)
         box @= convert_matrix                          
         return (box, score)
-blocks.IAuxDetect = IAuxDetect
+common.blocks.IAuxDetect = IAuxDetect
 
 
 def build_model(cfg, training=True, input_shape=(640,640), deploy=False, custom_model=False, name='yolo_model'):
