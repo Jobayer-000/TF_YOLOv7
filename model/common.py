@@ -5,7 +5,7 @@ import numpy as np
 
 
 
-##### basic ####
+
 class blocks:
     CommonBlocks = True
 
@@ -32,7 +32,7 @@ class Pad(keras.layers.Layer):
 
 
 def MP(name='MP',**kwargs):
-    """urapping maxpooling2D layer"""
+    """wrapping maxpooling2D layer"""
     def layer(x):
         x = keras.layers.MaxPooling2D(name=f'{name}')(x)
         return x
@@ -41,7 +41,7 @@ blocks.MP = MP
 
 
 def Upsample(size, interpolation, name, **kwargs):
-    """ urapping UpSampling2D layers """
+    """ wrapping UpSampling2D layers """
     def layer(x):
         return keras.layers.UpSampling2D(size, interpolation=interpolation, name=f'{name}')(x)
     return layer
@@ -64,17 +64,17 @@ class ReOrg(keras.layers.Layer):
         x =  tf.concat(
             [x[:, ::2, ::2,:], x[:, 1::2, ::2,:], x[:, ::2, 1::2, :], x[..., 1::2, 1::2,:]], -1)
         return x
- blocks.ReOrg = ReOrg
+blocks.ReOrg = ReOrg
 
 
 @keras.utils.register_keras_serializable()
 def Concat(dimension=-1, name='_', **kwargs):
-    """ concat a list of tensor in the filters dimension """
+    """ concat a list of tensor in their filters dimension """
     def layer(x):
         x = keras.layers.Concatenate(name=f'{name}', axis=dimension)(x)
         return x
     return layer
-blocks.Concat
+blocks.Concat = Concat
 
 
 @keras.utils.register_keras_serializable()
@@ -84,7 +84,7 @@ class Shortcut(keras.layers.Layer):
         super(Shortcut, self).__init__(name=name, *kwargs)
     def call(self, x):
         return x[0]+x[1]
-blocks.Shortcut
+blocks.Shortcut = Shortcut
 
 
 
@@ -149,7 +149,7 @@ class DownC(keras.layers.Layer):
         config = super(DownC, self).get_config()
         config.update({'filters': self.filters, 'n': self.n, 'kernel_size':self.kernel_size})
         return config
-blocks.DownC
+blocks.DownC = DownC
 
 
 
@@ -360,4 +360,4 @@ class RepConv(keras.layers.Layer):
         self.deploy = True
         print('RepConv fussed')
 
-blocks.RepConv
+blocks.RepConv = RepConv
