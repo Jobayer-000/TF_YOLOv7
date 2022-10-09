@@ -230,7 +230,7 @@ def build_model(cfg, training=True, input_shape=(640,640), deploy=False, custom_
         
         f, n, block, arg = values
         output.append(
-            eval(f'{block}')(*arg, name=f'{idx}_{block}', deploy=deploy)(
+            eval(f'{blocks.block}')(*arg, name=f'{idx}_{block}', deploy=deploy)(
                 [output[i] for i in f] if isinstance(f, list) else (input_ if len(output)==0 else output[f])))
         
     model = custom_model( inputs=input_, outputs=output[-1], name=name) if custom_model else keras.Model(
