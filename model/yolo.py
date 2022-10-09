@@ -1,8 +1,9 @@
 import tensorflow as tf
 from tensorflow import keras
-from . import blocks
+from . import common
 from loss import SigmoidBin
 import cfg
+blocks = common.blocks
 
 @keras.utils.register_keras_serializable()
 class Detect(keras.layers.Layer):
@@ -20,8 +21,8 @@ class Detect(keras.layers.Layer):
         self.training = training
         
     def call(self, x):
-        # x = x.copy()  # for profiling
-        z = []  # inference output
+        
+        z = [] 
         outputs = []
         for i in range(self.nl):
             output = self.m[i](x[i])  # conv
@@ -208,6 +209,16 @@ class IAuxDetect(keras.layers.Layer):
         grid_xy = tf.meshgrid(tf.range(ny), tf.range(nx))
         grid = tf.cast(tf.expand_dims(tf.stack(grid_xy, axis=-1), 2), tf.float32)
         return tf.cast(grid, tf.float32)
+    def convert(self, z):
+        z = tf.concat(z, axis=1)
+        box = z[:, :, :4]
+        conf = z[:, :, 4:5]
+        score = z[:, :, 5:]
+        score *= conf
+        convert_matrix = tf.constant([[1, 0, 1, 0], [0, 1, 0, 1], [-0.5, 0, 0.5, 0], [0, -0.5, 0, 0.5]],
+                                           dtype=tf.float32)
+        box @= convert_matrix                          
+        return (box, score)
 blocks.IAuxDetect = IAuxDetect
 
 
