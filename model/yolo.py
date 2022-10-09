@@ -1,7 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
 from . import common
-from loss import SigmoidBin
 import cfg
 blocks = common.blocks
 
