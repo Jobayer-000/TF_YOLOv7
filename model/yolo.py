@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
-from model.common import **
+from model.common import *
 import cfg
 
 
