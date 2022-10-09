@@ -1,6 +1,6 @@
 import tensorflow as tf
 from tensorflow import keras
-from models.common import blocks
+from . import blocks
 from loss import SigmoidBin
 import cfg
 
